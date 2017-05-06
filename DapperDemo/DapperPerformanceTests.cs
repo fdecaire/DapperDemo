@@ -160,12 +160,14 @@ namespace DapperDemo
 				{
 					for (int i = 0; i < 1000; i++)
 					{
-						var p = new DynamicParameters();
-						p.Add("@first", firstnames[i]);
-						p.Add("@last", lastnames[i]);
-						p.Add("@department", _departmentKey);
+						var person = new Person
+						{
+							first= firstnames[i],
+							last= lastnames[i],
+							department = _departmentKey
+						};
 
-						db.Execute("INSERT INTO Person (first,last,department) VALUES (@first,@last,@department)", p);
+						db.Execute("INSERT INTO Person (first,last,department) VALUES (@first,@last,@department)", person);
 					}
 				}
 
@@ -182,7 +184,7 @@ namespace DapperDemo
 				var startTime = DateTime.Now;
 				for (int i = 0; i < 1000; i++)
 				{
-					string sql = "SELECT * FROM Department d join Person p on p.department=d.Id";
+					string sql = "SELECT p.* FROM Department d JOIN Person p ON p.department = d.id";
 					var result = db.Query(sql).ToList();
 				}
 				var elapsedTime = DateTime.Now - startTime;
